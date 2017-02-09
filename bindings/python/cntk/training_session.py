@@ -30,7 +30,7 @@ class TrainingSession(cntk_py.TrainingSession):
         training_minibatch_source (:class:`~cntk.io.MinibatchSource`): minibatch source used for training
         trainer (:class:`~cntk.trainer.Trainer`): trainer
         mb_size_schedule (:class:`~cntk.cntk_py.minibatch_size_schedule`): minibatch schedule for training
-        progress_writers (list): list of progress writers from :mod:`cntk.utils`
+        progress_printer (list): list of progress writers from :mod:`cntk.utils`
         model_inputs_to_mb_source_mapping (dict): mapping between input variables and input streams
         checkpoint_frequency (int): checkpoint frequency in samples. If 0, no checkpointing takes place. 
           If ``sys.maxsize``, a single checkpoint is taken at the end of the training.
@@ -46,10 +46,12 @@ class TrainingSession(cntk_py.TrainingSession):
     '''
 
     def __init__(self, training_minibatch_source, trainer, mb_size_schedule,
-                 progress_writers, model_inputs_to_mb_source_mapping,
+                 progress_printer, model_inputs_to_mb_source_mapping,
                  checkpoint_frequency, checkpoint_filename, save_all_checkpoints,
                  restore, progress_frequency, cv_source, cv_frequency, cv_mb_size_schedule, max_training_samples):
 
+        # TODO: rename progress_printer argument to progress_writers
+        progress_writers = progress_printer
         if progress_writers and not isinstance(progress_writers, list):
             progress_writers = [progress_writers]
 
@@ -207,7 +209,7 @@ def minibatch_size_schedule(schedule, epoch_size=1):
 @typemap
 def training_session(training_minibatch_source,
                      trainer, mb_size_schedule,
-                     progress_writers=None,
+                     progress_printer=None,
                      model_inputs_to_mb_source_mapping={},
                      checkpoint_filename=None,
                      checkpoint_frequency=None,
@@ -225,7 +227,7 @@ def training_session(training_minibatch_source,
         training_minibatch_source (:class:`~cntk.io.MinibatchSource`): minibatch source used for training
         trainer (:class:`~cntk.trainer.Trainer`): trainer
         mb_size_schedule (:class:`~cntk.cntk_py.minibatch_size_schedule`): minibatch schedule for training
-        progress_writers (list): list of progress writers from :mod:`cntk.utils`
+        progress_printer (list): list of progress writers from :mod:`cntk.utils`
         model_inputs_to_mb_source_mapping (dict): mapping between input variables and input streams
         checkpoint_filename (str): checkpoint file name.
         checkpoint_frequency (int): checkpoint frequency in samples. If 0, no checkpointing takes place. 
@@ -243,7 +245,7 @@ def training_session(training_minibatch_source,
         Instance of :class:`~TrainingSession`
     '''
     return TrainingSession(training_minibatch_source, trainer,
-                           mb_size_schedule, progress_writers,
+                           mb_size_schedule, progress_printer,
                            model_inputs_to_mb_source_mapping,
                            checkpoint_frequency,
                            checkpoint_filename,

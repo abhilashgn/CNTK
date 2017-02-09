@@ -128,7 +128,7 @@ def train_and_test(network, trainer, train_source, test_source, progress_writers
         trainer = trainer,
         model_inputs_to_mb_source_mapping = input_map, 
         mb_size_schedule = cntk.minibatch_size_schedule(minibatch_size),
-        progress_writers = progress_writers,
+        progress_printer = progress_writers,
 #        checkpoint_frequency = epoch_size, 
         checkpoint_filename = os.path.join(model_path, "ConvNet_CIFAR10_DataAug"),
 #        save_all_checkpoints = False, 
